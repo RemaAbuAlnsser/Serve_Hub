@@ -17,8 +17,10 @@ import AdminToast from '@/components/AdminToast';
 interface Product {
   id: number;
   name: string;
+  name_en?: string;
   sku?: string;
   description: string;
+  description_en?: string;
   price: number;
   old_price?: number;
   stock: number;
@@ -89,8 +91,10 @@ export default function ProductsPage() {
 
   const [formData, setFormData] = useState({
     name: '',
+    name_en: '',
     sku: '',
     description: '',
+    description_en: '',
     price: '',
     old_price: '',
     stock: '',
@@ -268,8 +272,10 @@ export default function ProductsPage() {
     setEditingProduct(product);
     setFormData({
       name: product.name,
+      name_en: product.name_en || '',
       sku: product.sku || '',
       description: product.description || '',
+      description_en: product.description_en || '',
       price: product.price.toString(),
       old_price: product.old_price?.toString() || '',
       stock: product.stock.toString(),
@@ -393,7 +399,7 @@ export default function ProductsPage() {
         setToastType('success');
         setShowToast(true);
         setIsModalOpen(false);
-        setFormData({ name: '', sku: '', description: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
+        setFormData({ name: '', name_en: '', sku: '', description: '', description_en: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
         setImagePreview('');
         setHoverImagePreview('');
         setGalleryImages([]);
@@ -587,7 +593,7 @@ export default function ProductsPage() {
         <button
           onClick={() => {
             setEditingProduct(null);
-            setFormData({ name: '', sku: '', description: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
+            setFormData({ name: '', name_en: '', sku: '', description: '', description_en: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
             setImagePreview('');
             setHoverImagePreview('');
             setTempColors([]);
@@ -1071,7 +1077,7 @@ export default function ProductsPage() {
               <button
                 onClick={() => {
                   setIsModalOpen(false);
-                  setFormData({ name: '', sku: '', description: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
+                  setFormData({ name: '', name_en: '', sku: '', description: '', description_en: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
                   setImagePreview('');
                   setHoverImagePreview('');
                   setEditingProduct(null);
@@ -1229,10 +1235,10 @@ export default function ProductsPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Product Name */}
+                {/* Product Name Arabic */}
                 <div>
                   <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                    اسم المنتج *
+                    اسم المنتج (عربي) *
                   </label>
                   <input
                     type="text"
@@ -1244,8 +1250,23 @@ export default function ProductsPage() {
                   />
                 </div>
 
-                {/* SKU */}
+                {/* Product Name English */}
                 <div>
+                  <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                    Product Name (English)
+                  </label>
+                  <input
+                    type="text"
+                    dir="ltr"
+                    value={formData.name_en}
+                    onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors"
+                    placeholder="Example: iPhone 15"
+                  />
+                </div>
+
+                {/* SKU */}
+                <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
                     المعرف (SKU) *
                     <span className="text-xs text-[#5E4A45] mr-2">لمنع تكرار المنتج واستخدامه في الروابط</span>
@@ -1427,10 +1448,10 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* Description */}
+              {/* Description Arabic */}
               <div>
                 <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                  الوصف
+                  الوصف (عربي)
                 </label>
                 <textarea
                   value={formData.description}
@@ -1438,6 +1459,21 @@ export default function ProductsPage() {
                   rows={4}
                   className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors resize-none"
                   placeholder="وصف المنتج..."
+                />
+              </div>
+
+              {/* Description English */}
+              <div>
+                <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                  Description (English)
+                </label>
+                <textarea
+                  dir="ltr"
+                  value={formData.description_en}
+                  onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors resize-none"
+                  placeholder="Product description..."
                 />
               </div>
 
@@ -1647,7 +1683,7 @@ export default function ProductsPage() {
                   type="button"
                   onClick={() => {
                     setIsModalOpen(false);
-                    setFormData({ name: '', sku: '', description: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
+                    setFormData({ name: '', name_en: '', sku: '', description: '', description_en: '', price: '', old_price: '', stock: '', category_id: '', subcategory_id: '', company_id: '', image_url: '', hover_image_url: '', status: 'published', is_featured: false, is_exclusive: false });
                     setImagePreview('');
                     setHoverImagePreview('');
                     setEditingProduct(null);

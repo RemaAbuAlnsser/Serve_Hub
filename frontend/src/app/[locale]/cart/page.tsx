@@ -6,8 +6,12 @@ import Header from '@/components/Header';
 import Image from 'next/image';
 import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function CartPage() {
+  const locale = useLocale();
+  const t = useTranslations('cart');
+  const tCommon = useTranslations('common');
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
   const router = useRouter();
 
@@ -19,14 +23,14 @@ export default function CartPage() {
           <div className="text-center py-20">
             <div className="text-6xl mb-4 opacity-20">🛒</div>
             <h2 className="text-2xl md:text-3xl font-bold text-[#2c2c2c] mb-4">
-              سلة التسوق فارغة
+              {t('empty')}
             </h2>
-            <p className="text-gray-600 mb-8">لم تقم بإضافة أي منتجات بعد</p>
+            <p className="text-gray-600 mb-8">{t('emptyDescription')}</p>
             <button
               onClick={() => router.push('/')}
               className="px-6 py-3 bg-[#2c2c2c] text-white rounded-full hover:bg-[#1a1a1a] transition-colors font-semibold"
             >
-              تصفح المنتجات
+              {t('startShopping')}
             </button>
           </div>
         </div>
@@ -43,7 +47,7 @@ export default function CartPage() {
           className="flex items-center gap-2 text-[#2c2c2c] hover:text-[#d4af37] transition-colors mb-6 md:mb-8 group"
         >
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          <span className="font-semibold">متابعة التسوق</span>
+          <span className="font-semibold">{tCommon('continueShopping')}</span>
         </button>
 
         <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
@@ -51,13 +55,13 @@ export default function CartPage() {
             <div className="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4">
               <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl md:text-3xl font-bold text-[#2c2c2c]">
-                  سلة التسوق ({items.length} {items.length === 1 ? 'منتج' : 'منتجات'})
+                  {t('title')} ({items.length} {items.length === 1 ? t('itemsInCart').split(' ')[0] : t('itemsInCart')})
                 </h1>
                 <button
                   onClick={clearCart}
                   className="text-red-500 hover:text-red-700 text-sm font-semibold transition-colors"
                 >
-                  إفراغ السلة
+                  {t('clearCart')}
                 </button>
               </div>
 
@@ -90,7 +94,7 @@ export default function CartPage() {
                         </h3>
                         {item.color_name && (
                           <p className="text-gray-600 text-sm mb-1">
-                            اللون: {item.color_name}
+                            {locale === 'ar' ? 'اللون' : 'Color'}: {item.color_name}
                           </p>
                         )}
                         <p className="text-[#d4af37] font-bold text-xl">
@@ -127,7 +131,7 @@ export default function CartPage() {
                     </div>
 
                     <div className="hidden md:flex flex-col items-end justify-between">
-                      <p className="text-sm text-gray-500">المجموع</p>
+                      <p className="text-sm text-gray-500">{tCommon('total')}</p>
                       <p className="text-xl font-bold text-[#2c2c2c]">
                         {(Number(item.price) * item.quantity).toFixed(2)} ₪
                       </p>
@@ -140,11 +144,11 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">ملخص الطلب</h2>
+              <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">{t('orderSummary') || tCommon('total')}</h2>
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-600">
-                  <span>المجموع الفرعي</span>
+                  <span>{t('subtotal')}</span>
                   <span className="font-semibold">{totalPrice.toFixed(2)} ₪</span>
                 </div>
                 {/* <div className="flex justify-between text-gray-600">
@@ -152,7 +156,7 @@ export default function CartPage() {
                   <span className="font-semibold">مجاني</span>
                 </div> */}
                 <div className="border-t pt-4 flex justify-between text-lg font-bold text-[#2c2c2c]">
-                  <span>المجموع الكلي</span>
+                  <span>{t('total')}</span>
                   <span className="text-[#d4af37]">{totalPrice.toFixed(2)} ₪</span>
                 </div>
               </div>
@@ -161,14 +165,14 @@ export default function CartPage() {
                 onClick={() => router.push('/checkout')}
                 className="w-full py-3 bg-[#2c2c2c] text-white rounded-full hover:bg-[#1a1a1a] transition-colors font-semibold text-lg mb-3"
               >
-                إتمام الطلب
+                {tCommon('checkout')}
               </button>
               
               <button
                 onClick={() => router.push('/')}
                 className="w-full py-3 border-2 border-[#2c2c2c] text-[#2c2c2c] rounded-full hover:bg-gray-50 transition-colors font-semibold"
               >
-                متابعة التسوق
+                {tCommon('continueShopping')}
               </button>
             </div>
           </div>

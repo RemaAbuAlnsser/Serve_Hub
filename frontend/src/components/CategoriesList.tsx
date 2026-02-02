@@ -5,11 +5,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import { getLocalizedName, getLocalizedDescription } from '@/lib/localeHelpers';
 
 interface Subcategory {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
   category_id: number;
 }
@@ -17,11 +21,14 @@ interface Subcategory {
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   subcategories: Subcategory[];
 }
 
 export default function CategoriesList() {
+  const locale = useLocale();
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
@@ -119,10 +126,10 @@ export default function CategoriesList() {
 
                 <div className="text-right flex-1">
                   <h3 className="text-xl font-bold text-[#2c2c2c] mb-1">
-                    {category.name}
+                    {getLocalizedName(category, locale)}
                   </h3>
-                  {category.description && (
-                    <p className="text-sm text-[#666]">{category.description}</p>
+                  {(category.description || category.description_en) && (
+                    <p className="text-sm text-[#666]">{getLocalizedDescription(category, locale)}</p>
                   )}
                   {category.subcategories.length > 0 && (
                     <p className="text-xs text-[#999] mt-1">
@@ -142,10 +149,10 @@ export default function CategoriesList() {
                     >
                       <div className="text-right">
                         <h4 className="text-lg font-semibold text-[#2c2c2c] mb-1">
-                          {subcategory.name}
+                          {getLocalizedName(subcategory, locale)}
                         </h4>
-                        {subcategory.description && (
-                          <p className="text-sm text-[#666]">{subcategory.description}</p>
+                        {(subcategory.description || subcategory.description_en) && (
+                          <p className="text-sm text-[#666]">{getLocalizedDescription(subcategory, locale)}</p>
                         )}
                       </div>
                     </div>

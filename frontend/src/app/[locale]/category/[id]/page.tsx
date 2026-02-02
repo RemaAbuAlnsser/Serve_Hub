@@ -12,12 +12,16 @@ import { useFlyingAnimation } from '@/hooks/useFlyingAnimation';
 import NewLabel from '@/components/NewLabel';
 import { isProductNew } from '@/utils/dateUtils';
 import Toast from '@/components/Toast';
+import { useLocale, useTranslations } from 'next-intl';
+import { getLocalizedName, getLocalizedDescription } from '@/lib/localeHelpers';
 
 interface Product {
   id: number;
   name: string;
+  name_en?: string;
   sku?: string;
   description?: string;
+  description_en?: string;
   price: number;
   old_price?: number;
   image_url?: string;
@@ -31,25 +35,33 @@ interface Product {
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
 }
 
 interface Company {
   id: number;
   name: string;
+  name_en?: string;
   logo_url?: string;
 }
 
 interface Subcategory {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
   category_id: number;
 }
 
 export default function CategoryPage() {
+  const locale = useLocale();
+  const t = useTranslations('category');
+  const tCommon = useTranslations('common');
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -267,7 +279,7 @@ export default function CategoryPage() {
         return;
       }
       
-      setToastMessage(`تمت إضافة "${product.name}" إلى السلة`);
+      setToastMessage(`تمت إضافة "${getLocalizedName(product, locale)}" إلى السلة`);
       setShowToast(true);
     });
   }, [addToCart, createFlyingAnimation]);
@@ -387,7 +399,7 @@ export default function CategoryPage() {
             <>
               <Image
                 src={`${API_URL}${category.image_url}`}
-                alt={category.name}
+                alt={getLocalizedName(category, locale)}
                 fill
                 className="object-cover opacity-30"
                 unoptimized
@@ -404,18 +416,18 @@ export default function CategoryPage() {
               className="flex items-center gap-2 text-white hover:text-[#d4af37] transition-colors mb-4 group w-fit"
             >
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <span className="font-semibold">العودة للرئيسية</span>
+              <span className="font-semibold">{tCommon('backToHome')}</span>
             </button>
             
             <h1
               ref={titleRef}
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2"
             >
-              {category.name}
+              {getLocalizedName(category, locale)}
             </h1>
-            {category.description && (
+            {(category.description || category.description_en) && (
               <p className="text-gray-200 text-sm md:text-base max-w-2xl">
-                {category.description}
+                {getLocalizedDescription(category, locale)}
               </p>
             )}
           </div>
@@ -431,16 +443,16 @@ export default function CategoryPage() {
               {(selectedSubcategory || selectedCompany) && (
                 <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600">الفلاتر النشطة:</span>
+                    <span className="text-sm font-medium text-gray-600">{t('activeFilters')}</span>
                     {selectedSubcategory && (
                       <span className="inline-flex items-center gap-1 bg-[#d4af37]/10 text-[#d4af37] px-3 py-1 rounded-full text-sm">
-                        {subcategories.find(s => s.id === selectedSubcategory)?.name}
+                        {getLocalizedName(subcategories.find(s => s.id === selectedSubcategory)!, locale)}
                         <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedSubcategory(null)} />
                       </span>
                     )}
                     {selectedCompany && (
                       <span className="inline-flex items-center gap-1 bg-[#d4af37]/10 text-[#d4af37] px-3 py-1 rounded-full text-sm">
-                        {companies.find(c => c.id === selectedCompany)?.name}
+                        {getLocalizedName(companies.find(c => c.id === selectedCompany)!, locale)}
                         <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedCompany(null)} />
                       </span>
                     )}
@@ -449,7 +461,7 @@ export default function CategoryPage() {
                     onClick={clearAllFilters}
                     className="text-sm text-red-500 hover:text-red-600 font-medium transition-colors"
                   >
-                    مسح الكل
+                    {t('clearAll')}
                   </button>
                 </div>
               )}
@@ -459,7 +471,7 @@ export default function CategoryPage() {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-base md:text-lg font-bold text-[#2c2c2c] flex items-center gap-2">
-                      الأقسام الفرعية
+                      {t('subcategories')}
                     </h3>
                     <div className="flex items-center gap-2">
                       <button
@@ -501,7 +513,7 @@ export default function CategoryPage() {
                           {subcategory.image_url ? (
                             <Image
                               src={`${API_URL}${subcategory.image_url}`}
-                              alt={subcategory.name}
+                              alt={getLocalizedName(subcategory, locale)}
                               width={96}
                               height={96}
                               unoptimized
@@ -510,7 +522,7 @@ export default function CategoryPage() {
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#d4af37] to-[#b8962e] flex items-center justify-center">
                               <span className="text-white text-xl md:text-2xl font-bold">
-                                {subcategory.name.charAt(0)}
+                                {getLocalizedName(subcategory, locale).charAt(0)}
                               </span>
                             </div>
                           )}
@@ -520,7 +532,7 @@ export default function CategoryPage() {
                             ? 'text-[#d4af37] font-bold'
                             : 'text-[#2c2c2c] group-hover:text-[#d4af37]'
                         }`}>
-                          {subcategory.name}
+                          {getLocalizedName(subcategory, locale)}
                         </span>
                       </div>
                     ))}
@@ -533,7 +545,7 @@ export default function CategoryPage() {
                 <div>
                   <h3 className="text-sm font-bold text-[#2c2c2c] mb-3 flex items-center gap-2">
                     <span className="w-1 h-5 bg-[#d4af37] rounded-full"></span>
-                    الماركات
+                    {t('brands')}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <button
@@ -544,7 +556,7 @@ export default function CategoryPage() {
                           : 'bg-gray-50 text-[#2c2c2c] hover:bg-gray-100'
                       }`}
                     >
-                      الكل
+                      {t('all')}
                     </button>
                     {companies.map((company) => (
                       <button
@@ -559,14 +571,14 @@ export default function CategoryPage() {
                         {company.logo_url && (
                           <Image
                             src={`${API_URL}${company.logo_url}`}
-                            alt={company.name}
+                            alt={getLocalizedName(company, locale)}
                             width={20}
                             height={20}
                             unoptimized
                             className="w-5 h-5 object-contain rounded"
                           />
                         )}
-                        <span>{company.name}</span>
+                        <span>{getLocalizedName(company, locale)}</span>
                       </button>
                     ))}
                   </div>
@@ -576,7 +588,7 @@ export default function CategoryPage() {
               {/* Results Count */}
               <div className="pt-4 border-t border-gray-100">
                 <p className="text-sm text-gray-600">
-                  عرض <span className="font-bold text-[#2c2c2c]">{products.length}</span> {products.length === 1 ? 'منتج' : 'منتجات'}
+                  {t('showing')} <span className="font-bold text-[#2c2c2c]">{products.length}</span> {products.length === 1 ? t('product') : t('productsPlural')}
                 </p>
               </div>
             </div>
@@ -585,7 +597,7 @@ export default function CategoryPage() {
           {products.length === 0 ? (
             <div className="text-center py-20">
               <div className="text-6xl mb-4 opacity-20">📦</div>
-              <p className="text-gray-500 text-lg">لا توجد منتجات في هذا القسم حالياً</p>
+              <p className="text-gray-500 text-lg">{t('noProductsInSection')}</p>
             </div>
           ) : (
             <div
@@ -607,14 +619,14 @@ export default function CategoryPage() {
                       <>
                         <Image
                           src={`${API_URL}${product.image_url}`}
-                          alt={product.name}
+                          alt={getLocalizedName(product, locale)}
                           fill
                           className={`object-cover group-hover:scale-105 transition-transform duration-500 ${product.stock === 0 ? 'opacity-50 grayscale' : ''}`}
                         />
                         {product.hover_image_url && (
                           <Image
                             src={`${API_URL}${product.hover_image_url}`}
-                            alt={product.name}
+                            alt={getLocalizedName(product, locale)}
                             fill
                             className={`object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${product.stock === 0 ? 'grayscale' : ''}`}
                           />
@@ -656,7 +668,7 @@ export default function CategoryPage() {
                       }}
                       className="product-name text-lg md:text-xl font-bold text-gray-800 mb-3 line-clamp-2 cursor-pointer hover:text-[#d4af37] transition-colors"
                     >
-                      {product.name}
+                      {getLocalizedName(product, locale)}
                     </h3>
                     <div className="mb-4">
                       {product.old_price && product.old_price > product.price ? (
@@ -690,7 +702,7 @@ export default function CategoryPage() {
                         className="w-full px-3 py-3 bg-[#2c2c2c] text-white rounded-lg hover:bg-[#1a1a1a] transition-colors font-medium text-sm flex items-center justify-center gap-2"
                       >
                         <ShoppingCart className="w-4 h-4" />
-                        <span>أضف للسلة</span>
+                        <span>{tCommon('addToCart')}</span>
                       </button>
                     )}
                   </div>

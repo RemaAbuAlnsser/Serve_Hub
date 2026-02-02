@@ -8,8 +8,12 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { MapPin, Search, ChevronDown } from 'lucide-react';
 import SuccessModal from '@/components/SuccessModal';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function CheckoutPage() {
+  const locale = useLocale();
+  const t = useTranslations('checkout');
+  const tCommon = useTranslations('common');
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -182,14 +186,14 @@ export default function CheckoutPage() {
         <Header />
       <div className="container mx-auto px-4 md:px-6 py-8 md:py-12">
         <h1 className="text-2xl md:text-3xl font-bold text-[#2c2c2c] mb-8 text-center">
-          إتمام الطلب
+          {t('title')}
         </h1>
 
         <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
           {/* قسم ملخص الطلب */}
           <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-[#2c2c2c] mb-4">ملخص الطلب</h2>
+              <h2 className="text-xl font-bold text-[#2c2c2c] mb-4">{t('orderSummary')}</h2>
               
               <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
                 {items.map((item) => (
@@ -216,7 +220,7 @@ export default function CheckoutPage() {
                       {item.color_name && (
                         <p className="text-xs text-gray-500">اللون: {item.color_name}</p>
                       )}
-                      <p className="text-xs text-gray-500">الكمية: {item.quantity}</p>
+                      <p className="text-xs text-gray-500">{tCommon('quantity')}: {item.quantity}</p>
                       <p className="text-sm font-bold text-[#2c2c2c]">
                         {(Number(item.price) * item.quantity).toFixed(2)} ₪
                       </p>
@@ -227,15 +231,15 @@ export default function CheckoutPage() {
 
               <div className="space-y-2 pt-4 border-t">
                 <div className="flex justify-between text-gray-600">
-                  <span>المجموع الفرعي</span>
+                  <span>{t('subtotal')}</span>
                   <span className="font-semibold">{totalPrice.toFixed(2)} ₪</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>الشحن</span>
+                  <span>{t('shipping')}</span>
                   <span className="font-semibold">{shippingCost.toFixed(2)} ₪</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold text-[#2c2c2c] pt-2 border-t">
-                  <span>الإجمالي</span>
+                  <span>{t('totalAmount')}</span>
                   <span className="text-[#d4af37]">{finalTotal.toFixed(2)} ₪</span>
                 </div>
               </div>
@@ -247,12 +251,12 @@ export default function CheckoutPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* معلومات الفاتورة والشحن */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">الفاتورة والشحن</h2>
+                <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">{t('billingShipping')}</h2>
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-[#2c2c2c] mb-2">
-                      الاسم الكامل *
+                      {t('fullName')} *
                     </label>
                     <input
                       type="text"
@@ -261,13 +265,13 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2c2c2c] focus:border-transparent outline-none transition-all"
-                      placeholder="أدخل اسمك الكامل"
+                      placeholder={t('enterFullName')}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-[#2c2c2c] mb-2">
-                      مدينة التوصيل *
+                      {t('deliveryCity')} *
                     </label>
                     <div className="relative delivery-dropdown">
                       <div
@@ -275,7 +279,7 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2c2c2c] focus:border-transparent outline-none transition-all cursor-pointer flex items-center justify-between bg-white"
                       >
                         <span className={selectedDeliveryCity ? 'text-gray-900' : 'text-gray-500'}>
-                          {selectedDeliveryCity ? selectedDeliveryCity.city_name : 'اختر مدينة التوصيل'}
+                          {selectedDeliveryCity ? selectedDeliveryCity.city_name : t('selectDeliveryCity')}
                         </span>
                         <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                       </div>
@@ -287,7 +291,7 @@ export default function CheckoutPage() {
                               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                               <input
                                 type="text"
-                                placeholder="ابحث عن المدينة..."
+                                placeholder={t('searchCity')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full pr-10 pl-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#2c2c2c] focus:border-transparent outline-none"
@@ -319,7 +323,7 @@ export default function CheckoutPage() {
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-semibold text-[#2c2c2c] mb-2">
-                      العنوان الكامل (الشارع والبناية) *
+                      {t('address')} *
                     </label>
                     <textarea
                       name="address"
@@ -328,13 +332,13 @@ export default function CheckoutPage() {
                       required
                       rows={3}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2c2c2c] focus:border-transparent outline-none transition-all resize-none"
-                      placeholder="أدخل عنوانك بالتفصيل"
+                      placeholder={t('enterAddress')}
                     />
                   </div>
 
                   <div className="md:col-span-2">
                     <label className="block text-sm font-semibold text-[#2c2c2c] mb-2">
-                      رقم الهاتف *
+                      {t('phone')} *
                     </label>
                     <input
                       type="tel"
@@ -370,13 +374,13 @@ export default function CheckoutPage() {
               {/* رسالة تنبيه إذا لم يتم اختيار مدينة */}
               {!selectedDeliveryCity && (
                 <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">مناطق التوصيل</h2>
+                  <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">{t('deliveryAreas')}</h2>
                   
                   <div className="flex items-center gap-3 p-4 border-2 border-orange-300 bg-orange-50 rounded-lg">
                     <MapPin className="w-5 h-5 text-orange-600" />
                     <div className="flex-1">
-                      <div className="font-semibold text-orange-800">يرجى اختيار مدينة التوصيل</div>
-                      <div className="text-sm text-orange-600">اختر مدينة التوصيل من القائمة أعلاه لمعرفة تكلفة التوصيل</div>
+                      <div className="font-semibold text-orange-800">{t('pleaseSelectCity')}</div>
+                      <div className="text-sm text-orange-600">{t('selectCityToKnowCost')}</div>
                     </div>
                   </div>
                 </div>
@@ -384,7 +388,7 @@ export default function CheckoutPage() {
 
               {/* معلومات الدفع */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">معلومات الدفع</h2>
+                <h2 className="text-xl font-bold text-[#2c2c2c] mb-6">{t('paymentInfo')}</h2>
                 
                 <label className="flex items-start gap-3 p-4 border-2 border-[#d4af37] bg-purple-50 rounded-lg cursor-pointer">
                   <input
@@ -396,9 +400,9 @@ export default function CheckoutPage() {
                     className="w-5 h-5 text-[#2c2c2c] focus:ring-[#2c2c2c] mt-1"
                   />
                   <div>
-                    <div className="font-semibold text-[#2c2c2c] mb-1">الدفع عند الاستلام</div>
+                    <div className="font-semibold text-[#2c2c2c] mb-1">{t('cashOnDelivery')}</div>
                     <div className="text-sm text-gray-600">
-                      عند استلام الطلب، يمكنك الدفع نقداً عن طريق بطاقة الائتمان، وفق سياسة الخصوصية.
+                      {t('cashOnDeliveryDesc')}
                     </div>
                   </div>
                 </label>
@@ -411,13 +415,13 @@ export default function CheckoutPage() {
                   onClick={() => router.push('/cart')}
                   className="flex-1 py-3 border-2 border-[#2c2c2c] text-[#2c2c2c] rounded-full hover:bg-gray-50 transition-colors font-semibold"
                 >
-                  العودة للسلة
+                  {t('backToCart')}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 py-3 bg-[#2c2c2c] text-white rounded-full hover:bg-[#1a1a1a] transition-colors font-semibold text-lg"
                 >
-                  تأكيد الطلب
+                  {t('placeOrder')}
                 </button>
               </div>
             </form>

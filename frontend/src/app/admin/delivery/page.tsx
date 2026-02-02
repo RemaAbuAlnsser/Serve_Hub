@@ -16,6 +16,7 @@ import AdminToast from '@/components/AdminToast';
 interface DeliveryCity {
   id: number;
   city_name: string;
+  city_name_en?: string;
   delivery_price: number;
   created_at: string;
   updated_at: string;
@@ -32,6 +33,7 @@ export default function DeliveryPage() {
   
   const [formData, setFormData] = useState({
     city_name: '',
+    city_name_en: '',
     delivery_price: '',
   });
 
@@ -74,6 +76,7 @@ export default function DeliveryPage() {
         },
         body: JSON.stringify({
           city_name: formData.city_name,
+          city_name_en: formData.city_name_en,
           delivery_price: parseFloat(formData.delivery_price),
         }),
       });
@@ -86,7 +89,7 @@ export default function DeliveryPage() {
           'success'
         );
         setIsModalOpen(false);
-        setFormData({ city_name: '', delivery_price: '' });
+        setFormData({ city_name: '', city_name_en: '', delivery_price: '' });
         setEditingCity(null);
         fetchCities();
       } else {
@@ -103,6 +106,7 @@ export default function DeliveryPage() {
     setEditingCity(city);
     setFormData({
       city_name: city.city_name,
+      city_name_en: city.city_name_en || '',
       delivery_price: city.delivery_price.toString(),
     });
     setIsModalOpen(true);
@@ -130,7 +134,7 @@ export default function DeliveryPage() {
   };
 
   const resetForm = () => {
-    setFormData({ city_name: '', delivery_price: '' });
+    setFormData({ city_name: '', city_name_en: '', delivery_price: '' });
     setEditingCity(null);
     setIsModalOpen(false);
   };
@@ -337,35 +341,49 @@ export default function DeliveryPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
-              {/* City Name */}
+              {/* City Name Arabic */}
               <div>
-                <label className="block text-sm font-medium text-black mb-2">
-                  اسم المدينة *
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  اسم المدينة (عربي) *
                 </label>
                 <input
                   type="text"
+                  required
                   value={formData.city_name}
                   onChange={(e) => setFormData({ ...formData, city_name: e.target.value })}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
-                  placeholder="أدخل اسم المدينة"
-                  required
+                  placeholder="مثال: عمان"
+                />
+              </div>
+
+              {/* City Name English */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City Name (English)
+                </label>
+                <input
+                  type="text"
+                  dir="ltr"
+                  value={formData.city_name_en}
+                  onChange={(e) => setFormData({ ...formData, city_name_en: e.target.value })}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
+                  placeholder="Example: Amman"
                 />
               </div>
 
               {/* Delivery Price */}
               <div>
-                <label className="block text-sm font-medium text-black mb-2">
-                  سعر التوصيل (بالشيكل) *
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  سعر التوصيل ($) *
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  min="0"
+                  required
                   value={formData.delivery_price}
                   onChange={(e) => setFormData({ ...formData, delivery_price: e.target.value })}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="0.00"
-                  required
                 />
               </div>
 

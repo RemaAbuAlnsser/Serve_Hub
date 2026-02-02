@@ -10,6 +10,7 @@
     "new": "New",
     "loading": "Loading...",
     "addToCart": "Add to Cart",
+    "addingToCart": "Adding...",
     "buyNow": "Buy Now",
     "viewDetails": "View Details",
     "price": "Price",
@@ -22,7 +23,8 @@
     "aboutUs": "About Us",
     "privacyPolicy": "Privacy Policy",
     "termsConditions": "Terms & Conditions",
-    "allRightsReserved": "All Rights Reserved"
+    "allRightsReserved": "All Rights Reserved",
+    "backToHome": "Back to Home"
   },
   "home": {
     "title": "Online Store - Shop with Confidence",
@@ -73,7 +75,7 @@
     "fullName": "Full Name",
     "email": "Email",
     "phone": "Phone Number",
-    "address": "Address",
+    "address": "Full Address (Street & Building)",
     "city": "City",
     "postalCode": "Postal Code",
     "notes": "Additional Notes",
@@ -83,7 +85,22 @@
     "orderPlaced": "Order Placed Successfully",
     "orderNumber": "Order Number",
     "thankYou": "Thank You!",
-    "deliveryFee": "Delivery Fee"
+    "deliveryFee": "Delivery Fee",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "totalAmount": "Total",
+    "searchCity": "Search for city...",
+    "billingShipping": "Billing & Shipping",
+    "deliveryCity": "Delivery City",
+    "selectDeliveryCity": "Select delivery city",
+    "deliveryAreas": "Delivery Areas",
+    "pleaseSelectCity": "Please select delivery city",
+    "selectCityToKnowCost": "Select delivery city from the list above to know the delivery cost",
+    "paymentInfo": "Payment Information",
+    "cashOnDeliveryDesc": "Upon receiving the order, you can pay cash or by credit card, according to the privacy policy.",
+    "backToCart": "Back to Cart",
+    "enterFullName": "Enter your full name",
+    "enterAddress": "Enter your address in detail"
   },
   "search": {
     "title": "Search Results",
@@ -100,7 +117,16 @@
     "priceAsc": "Price: Low to High",
     "priceDesc": "Price: High to Low",
     "newest": "Newest",
-    "popular": "Most Popular"
+    "popular": "Most Popular",
+    "subcategories": "Subcategories",
+    "brands": "Brands",
+    "all": "All",
+    "activeFilters": "Active Filters:",
+    "clearAll": "Clear All",
+    "showing": "Showing",
+    "product": "product",
+    "productsPlural": "products",
+    "noProductsInSection": "No products in this section currently"
   },
   "footer": {
     "quickLinks": "Quick Links",
@@ -111,7 +137,12 @@
     "enterEmail": "Enter your email",
     "subscribe": "Subscribe",
     "paymentMethods": "Payment Methods",
-    "securePayment": "Secure Payment"
+    "securePayment": "Secure Payment",
+    "contactUs": "Contact Us",
+    "products": "Products",
+    "returnPolicy": "Return & Exchange Policy",
+    "contactWhatsApp": "Contact WhatsApp",
+    "copyright": "All Rights Reserved"
   },
   "validation": {
     "required": "This field is required",

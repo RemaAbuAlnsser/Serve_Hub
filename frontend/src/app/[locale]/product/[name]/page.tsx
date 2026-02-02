@@ -11,6 +11,8 @@ import Toast from '@/components/Toast';
 import ProductDetailSkeleton from '@/components/ProductDetailSkeleton';
 import Footer from '@/components/Footer';
 import gsap from 'gsap';
+import { useLocale, useTranslations } from 'next-intl';
+import { getLocalizedName, getLocalizedDescription } from '@/lib/localeHelpers';
 
 interface ProductImage {
   id: number;
@@ -37,7 +39,9 @@ interface ProductColor {
 interface Product {
   id: number;
   name: string;
+  name_en?: string;
   description: string;
+  description_en?: string;
   price: number;
   old_price?: number;
   stock: number;
@@ -50,6 +54,8 @@ interface Product {
 }
 
 export default function ProductPage() {
+  const locale = useLocale();
+  const t = useTranslations('common');
   const params = useParams();
   const router = useRouter();
   const productSku = params.name as string;
@@ -239,7 +245,7 @@ export default function ProductPage() {
         }
         
         const colorText = selectedColor ? ` (${selectedColor.color_name})` : '';
-        setToastMessage(`تمت إضافة "${product.name}${colorText}" إلى السلة`);
+        setToastMessage(`تمت إضافة "${getLocalizedName(product, locale)}${colorText}" إلى السلة`);
         setShowToast(true);
       }, 300);
     }
@@ -340,7 +346,7 @@ export default function ProductPage() {
                     >
                       <Image
                         src={`${API_URL}${img}`}
-                        alt={`${product.name} - ${index + 1}`}
+                        alt={`${getLocalizedName(product, locale)} - ${index + 1}`}
                         fill
                         className="object-cover"
                       />
@@ -385,7 +391,7 @@ export default function ProductPage() {
                       <>
                         <Image
                           src={`${API_URL}${currentImage}`}
-                          alt={product.name}
+                          alt={getLocalizedName(product, locale)}
                           fill
                           className="object-cover transition-all duration-500 group-hover:scale-105"
                           priority
@@ -447,7 +453,7 @@ export default function ProductPage() {
           <div className="space-y-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-[#2c2c2c] mb-4">
-                {product.name}
+                {getLocalizedName(product, locale)}
               </h1>
               
               <div className="flex items-center gap-4 mb-6">
@@ -465,11 +471,11 @@ export default function ProductPage() {
                 )}
               </div>
 
-              {product.description && (
+              {(product.description || product.description_en) && (
                 <div className="mb-6">
                   <h3 className="text-lg font-bold text-[#2c2c2c] mb-2">الوصف</h3>
                   <p className="text-gray-700 leading-relaxed">
-                    {product.description}
+                    {getLocalizedDescription(product, locale)}
                   </p>
                 </div>
               )}
@@ -585,7 +591,7 @@ export default function ProductPage() {
                 className="w-full py-4 bg-[#2c2c2c] text-white rounded-full hover:bg-[#1a1a1a] transition-colors font-bold text-lg flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingCart size={24} />
-                <span>{isAnimating ? 'جاري الإضافة...' : 'أضف إلى السلة'}</span>
+                <span>{isAnimating ? t('addingToCart') : t('addToCart')}</span>
               </button>
             </div>
           </div>
@@ -618,7 +624,7 @@ export default function ProductPage() {
                     {relatedProduct.image_url ? (
                       <Image
                         src={`${API_URL}${relatedProduct.image_url}`}
-                        alt={relatedProduct.name}
+                        alt={getLocalizedName(relatedProduct, locale)}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -656,7 +662,7 @@ export default function ProductPage() {
                       onClick={() => router.push(`/product/${relatedProduct.sku || relatedProduct.id}`)}
                       className="text-sm md:text-base font-bold text-gray-800 mb-2 line-clamp-2 cursor-pointer hover:text-[#d4af37] transition-colors min-h-[40px]"
                     >
-                      {relatedProduct.name}
+                      {getLocalizedName(relatedProduct, locale)}
                     </h3>
                     <div className="flex items-center justify-center gap-2 mb-3">
                       <span className="text-lg font-bold text-[#2c2c2c]">
@@ -680,14 +686,14 @@ export default function ProductPage() {
                           image_url: relatedProduct.image_url,
                         });
                         if (result.success) {
-                          setToastMessage(`تمت إضافة "${relatedProduct.name}" إلى السلة`);
+                          setToastMessage(`تمت إضافة "${getLocalizedName(relatedProduct, locale)}" إلى السلة`);
                           setShowToast(true);
                         }
                       }}
                       className="w-full py-2 bg-[#2c2c2c] text-white rounded-lg hover:bg-[#1a1a1a] transition-colors text-sm font-medium flex items-center justify-center gap-2"
                     >
                       <ShoppingCart size={16} />
-                      <span>أضف للسلة</span>
+                      <span>{t('addToCart')}</span>
                     </button>
                   </div>
                 </div>

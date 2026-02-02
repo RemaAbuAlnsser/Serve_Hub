@@ -14,6 +14,7 @@ import {
 interface Company {
   id: number;
   name: string;
+  name_en?: string;
   logo_url?: string;
   created_at: string;
 }
@@ -27,6 +28,7 @@ export default function CompaniesPage() {
   
   const [formData, setFormData] = useState({
     name: '',
+    name_en: '',
     logo_url: '',
   });
 
@@ -75,6 +77,7 @@ export default function CompaniesPage() {
     setEditingCompany(company);
     setFormData({
       name: company.name,
+      name_en: company.name_en || '',
       logo_url: company.logo_url || '',
     });
     if (company.logo_url) {
@@ -107,7 +110,7 @@ export default function CompaniesPage() {
       if (result.success) {
         alert(editingCompany ? 'تم تحديث الشركة بنجاح!' : 'تم إضافة الشركة بنجاح!');
         setIsModalOpen(false);
-        setFormData({ name: '', logo_url: '' });
+        setFormData({ name: '', name_en: '', logo_url: '' });
         setImagePreview('');
         setEditingCompany(null);
         fetchCompanies();
@@ -233,7 +236,7 @@ export default function CompaniesPage() {
               <button
                 onClick={() => {
                   setIsModalOpen(false);
-                  setFormData({ name: '', logo_url: '' });
+                  setFormData({ name: '', name_en: '', logo_url: '' });
                   setImagePreview('');
                   setEditingCompany(null);
                 }}
@@ -291,7 +294,7 @@ export default function CompaniesPage() {
 
               <div>
                 <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                  اسم الشركة *
+                  اسم الشركة (عربي) *
                 </label>
                 <input
                   type="text"
@@ -305,13 +308,28 @@ export default function CompaniesPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                  Company Name (English)
+                </label>
+                <input
+                  type="text"
+                  dir="ltr"
+                  value={formData.name_en}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name_en: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors"
+                  placeholder="Example: Advanced Technology Company"
+                />
+              </div>
 
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     setIsModalOpen(false);
-                    setFormData({ name: '', logo_url: '' });
+                    setFormData({ name: '', name_en: '', logo_url: '' });
                     setImagePreview('');
                     setEditingCompany(null);
                   }}

@@ -17,7 +17,9 @@ import {
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description: string;
+  description_en?: string;
   image_url?: string;
   created_at: string;
 }
@@ -26,7 +28,9 @@ interface Subcategory {
   id: number;
   category_id: number;
   name: string;
+  name_en?: string;
   description: string;
+  description_en?: string;
   image_url?: string;
   created_at: string;
 }
@@ -46,14 +50,18 @@ export default function CategoriesPage() {
   
   const [formData, setFormData] = useState({
     name: '',
+    name_en: '',
     description: '',
+    description_en: '',
     image_url: '',
   });
 
   const [subFormData, setSubFormData] = useState({
     category_id: 0,
     name: '',
+    name_en: '',
     description: '',
+    description_en: '',
     image_url: '',
   });
 
@@ -101,7 +109,9 @@ export default function CategoriesPage() {
     setSubFormData({
       category_id: categoryId,
       name: '',
+      name_en: '',
       description: '',
+      description_en: '',
       image_url: '',
     });
     setImagePreview('');
@@ -113,7 +123,9 @@ export default function CategoriesPage() {
     setSubFormData({
       category_id: subcategory.category_id,
       name: subcategory.name,
+      name_en: subcategory.name_en || '',
       description: subcategory.description || '',
+      description_en: subcategory.description_en || '',
       image_url: subcategory.image_url || '',
     });
     if (subcategory.image_url) {
@@ -173,7 +185,7 @@ export default function CategoriesPage() {
       if (result.success) {
         alert(editingSubcategory ? 'تم تحديث الفئة الفرعية بنجاح!' : 'تم إضافة الفئة الفرعية بنجاح!');
         setIsSubModalOpen(false);
-        setSubFormData({ category_id: 0, name: '', description: '', image_url: '' });
+        setSubFormData({ category_id: 0, name: '', name_en: '', description: '', description_en: '', image_url: '' });
         setImagePreview('');
         setEditingSubcategory(null);
         if (subFormData.category_id) {
@@ -241,7 +253,9 @@ export default function CategoriesPage() {
     setEditingCategory(category);
     setFormData({
       name: category.name,
+      name_en: category.name_en || '',
       description: category.description || '',
+      description_en: category.description_en || '',
       image_url: category.image_url || '',
     });
     if (category.image_url) {
@@ -274,7 +288,7 @@ export default function CategoriesPage() {
       if (result.success) {
         alert(editingCategory ? 'تم تحديث الفئة بنجاح!' : 'تم إضافة الفئة بنجاح!');
         setIsModalOpen(false);
-        setFormData({ name: '', description: '', image_url: '' });
+        setFormData({ name: '', name_en: '', description: '', description_en: '', image_url: '' });
         setImagePreview('');
         setEditingCategory(null);
         fetchCategories();
@@ -484,7 +498,7 @@ export default function CategoriesPage() {
               <button
                 onClick={() => {
                   setIsModalOpen(false);
-                  setFormData({ name: '', description: '', image_url: '' });
+                  setFormData({ name: '', name_en: '', description: '', description_en: '', image_url: '' });
                   setImagePreview('');
                 }}
                 className="text-gray-600 hover:text-black transition-colors"
@@ -540,10 +554,10 @@ export default function CategoriesPage() {
                 </div>
               </div>
 
-              {/* Category Name */}
+              {/* Category Name Arabic */}
               <div>
                 <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                  اسم الفئة *
+                  اسم الفئة (عربي) *
                 </label>
                 <input
                   type="text"
@@ -557,10 +571,27 @@ export default function CategoriesPage() {
                 />
               </div>
 
-              {/* Description */}
+              {/* Category Name English */}
               <div>
                 <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                  الوصف
+                  Category Name (English)
+                </label>
+                <input
+                  type="text"
+                  dir="ltr"
+                  value={formData.name_en}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name_en: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors"
+                  placeholder="Example: Electronics"
+                />
+              </div>
+
+              {/* Description Arabic */}
+              <div>
+                <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                  الوصف (عربي)
                 </label>
                 <textarea
                   value={formData.description}
@@ -573,13 +604,30 @@ export default function CategoriesPage() {
                 />
               </div>
 
+              {/* Description English */}
+              <div>
+                <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                  Description (English)
+                </label>
+                <textarea
+                  dir="ltr"
+                  value={formData.description_en}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description_en: e.target.value })
+                  }
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors resize-none"
+                  placeholder="Category description..."
+                />
+              </div>
+
               {/* Submit Button */}
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     setIsModalOpen(false);
-                    setFormData({ name: '', description: '', image_url: '' });
+                    setFormData({ name: '', name_en: '', description: '', description_en: '', image_url: '' });
                     setImagePreview('');
                     setEditingCategory(null);
                   }}
@@ -611,7 +659,7 @@ export default function CategoriesPage() {
               <button
                 onClick={() => {
                   setIsSubModalOpen(false);
-                  setSubFormData({ category_id: 0, name: '', description: '', image_url: '' });
+                  setSubFormData({ category_id: 0, name: '', name_en: '', description: '', description_en: '', image_url: '' });
                   setImagePreview('');
                   setEditingSubcategory(null);
                 }}
@@ -669,7 +717,7 @@ export default function CategoriesPage() {
 
               <div>
                 <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                  اسم الفئة الفرعية *
+                  اسم الفئة الفرعية (عربي) *
                 </label>
                 <input
                   type="text"
@@ -679,13 +727,29 @@ export default function CategoriesPage() {
                     setSubFormData({ ...subFormData, name: e.target.value })
                   }
                   className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors"
-                  placeholder="مثال: شنط صغيرة"
+                  placeholder="مثال: هواتف ذكية"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
-                  الوصف
+                  Subcategory Name (English)
+                </label>
+                <input
+                  type="text"
+                  dir="ltr"
+                  value={subFormData.name_en}
+                  onChange={(e) =>
+                    setSubFormData({ ...subFormData, name_en: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors"
+                  placeholder="Example: Smartphones"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                  الوصف (عربي)
                 </label>
                 <textarea
                   value={subFormData.description}
@@ -698,12 +762,28 @@ export default function CategoriesPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-[#2c2c2c] mb-2">
+                  Description (English)
+                </label>
+                <textarea
+                  dir="ltr"
+                  value={subFormData.description_en}
+                  onChange={(e) =>
+                    setSubFormData({ ...subFormData, description_en: e.target.value })
+                  }
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-[#e8e8c8] rounded-xl focus:outline-none focus:border-[#5E4A45] transition-colors resize-none"
+                  placeholder="Subcategory description..."
+                />
+              </div>
+
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     setIsSubModalOpen(false);
-                    setSubFormData({ category_id: 0, name: '', description: '', image_url: '' });
+                    setSubFormData({ category_id: 0, name: '', name_en: '', description: '', description_en: '', image_url: '' });
                     setImagePreview('');
                     setEditingSubcategory(null);
                   }}

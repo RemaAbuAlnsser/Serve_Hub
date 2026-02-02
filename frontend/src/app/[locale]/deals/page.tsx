@@ -13,12 +13,16 @@ import NewLabel from '@/components/NewLabel';
 import { isProductNew } from '@/utils/dateUtils';
 import Toast from '@/components/Toast';
 import ProductSkeleton from '@/components/ProductSkeleton';
+import { useLocale, useTranslations } from 'next-intl';
+import { getLocalizedName } from '@/lib/localeHelpers';
 
 interface Product {
   id: number;
   name: string;
+  name_en?: string;
   sku?: string;
   description?: string;
+  description_en?: string;
   price: number;
   old_price?: number;
   image_url?: string;
@@ -29,6 +33,8 @@ interface Product {
 }
 
 export default function DealsPage() {
+  const locale = useLocale();
+  const t = useTranslations('common');
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +49,15 @@ export default function DealsPage() {
   useEffect(() => {
     const fetchDeals = async () => {
       try {
-        const response = await fetch(`${API_URL}/products/deals`);
+        // Add timestamp to prevent any caching
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${API_URL}/products/deals?_t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          },
+        });
         
         if (response.ok) {
           const text = await response.text();
@@ -77,7 +91,7 @@ export default function DealsPage() {
         return;
       }
       
-      setToastMessage(`تمت إضافة "${product.name}" إلى السلة`);
+      setToastMessage(`تمت إضافة "${getLocalizedName(product, locale)}" إلى السلة`);
       setShowToast(true);
     });
   }, [addToCart, createFlyingAnimation]);
@@ -206,14 +220,14 @@ export default function DealsPage() {
                       <>
                         <Image
                           src={`${API_URL}${product.image_url}`}
-                          alt={product.name}
+                          alt={getLocalizedName(product, locale)}
                           fill
                           className={`object-cover group-hover:scale-105 transition-transform duration-500 ${product.stock === 0 ? 'opacity-50 grayscale' : ''}`}
                         />
                         {product.hover_image_url && (
                           <Image
                             src={`${API_URL}${product.hover_image_url}`}
-                            alt={product.name}
+                            alt={getLocalizedName(product, locale)}
                             fill
                             className={`object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${product.stock === 0 ? 'grayscale' : ''}`}
                           />
@@ -255,7 +269,7 @@ export default function DealsPage() {
                       }}
                       className="product-name text-lg md:text-xl font-bold text-gray-800 mb-3 line-clamp-2 cursor-pointer hover:text-[#d4af37] transition-colors"
                     >
-                      {product.name}
+                      {getLocalizedName(product, locale)}
                     </h3>
                     <div className="mb-4">
                       {product.old_price && product.old_price > product.price ? (
@@ -284,7 +298,7 @@ export default function DealsPage() {
                         className="w-full px-3 py-3 bg-[#2c2c2c] text-white rounded-lg hover:bg-[#1a1a1a] transition-colors font-medium text-sm flex items-center justify-center gap-2"
                       >
                         <ShoppingCart className="w-4 h-4" />
-                        <span>أضف للسلة</span>
+                        <span>{t('addToCart')}</span>
                       </button>
                     )}
                   </div>

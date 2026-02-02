@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Cairo, Tajawal, Amiri } from "next/font/google";
 import "../globals.css";
-import { CartProvider } from "@/contexts/CartContext";
-import { AuthProvider } from "@/contexts/AuthContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -68,12 +66,8 @@ export default async function LocaleLayout({
         className={`${cairo.variable} ${tajawal.variable} ${amiri.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-            <CartProvider>
-              {children}
-              <WhatsAppButton />
-            </CartProvider>
-          </AuthProvider>
+          {children}
+          <WhatsAppButton />
         </NextIntlClientProvider>
       </body>
     </html>

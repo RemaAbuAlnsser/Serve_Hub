@@ -7,12 +7,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Facebook, Instagram, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import { API_URL } from '@/lib/api';
 import ReturnPolicyModal from './ReturnPolicyModal';
+import { useLocale, useTranslations } from 'next-intl';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 const Footer = memo(function Footer() {
+  const locale = useLocale();
+  const t = useTranslations('footer');
+  const tCommon = useTranslations('common');
   const router = useRouter();
   const footerRef = useRef<HTMLElement>(null);
   const topSectionRef = useRef<HTMLDivElement>(null);
@@ -155,7 +159,7 @@ const Footer = memo(function Footer() {
 
             {/* Quick Links */}
             <div className="footer-column">
-              <h3 className="text-lg font-bold mb-6 text-white">روابط سريعة</h3>
+              <h3 className="text-lg font-bold mb-6 text-white">{t('quickLinks')}</h3>
               <ul className="space-y-3">
                 <li>
                   <button
@@ -164,7 +168,7 @@ const Footer = memo(function Footer() {
                     onMouseEnter={handleLinkHover}
                     onMouseLeave={handleLinkHoverOut}
                   >
-                    الرئيسية
+                    {tCommon('home')}
                   </button>
                 </li>
                 <li>
@@ -174,7 +178,7 @@ const Footer = memo(function Footer() {
                     onMouseEnter={handleLinkHover}
                     onMouseLeave={handleLinkHoverOut}
                   >
-                    المنتجات
+                    {t('products')}
                   </button>
                 </li>
                 <li>
@@ -184,7 +188,7 @@ const Footer = memo(function Footer() {
                     onMouseEnter={handleLinkHover}
                     onMouseLeave={handleLinkHoverOut}
                   >
-                    العروض
+                    {tCommon('deals')}
                   </button>
                 </li>
                 <li>
@@ -194,7 +198,7 @@ const Footer = memo(function Footer() {
                     onMouseEnter={handleLinkHover}
                     onMouseLeave={handleLinkHoverOut}
                   >
-                    سياسة التبديل والاسترجاع
+                    {t('returnPolicy')}
                   </button>
                 </li>
               </ul>
@@ -204,7 +208,7 @@ const Footer = memo(function Footer() {
           {/* Center Section - Contact Info (4 columns) */}
           <div className="md:col-span-4 flex flex-col items-start md:items-center gap-6 order-2 md:order-2">
             <div className="w-full">
-              <h3 className="text-lg font-bold mb-6 text-white text-right md:text-center">تواصل معنا</h3>
+              <h3 className="text-lg font-bold mb-6 text-white text-right md:text-center">{t('contactUs')}</h3>
               <ul className="space-y-4">
                 {settings.contact_phone && (
                   <li className="flex items-center gap-3 justify-start md:justify-center text-gray-300 text-sm">
@@ -232,7 +236,7 @@ const Footer = memo(function Footer() {
                     className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl transition-all duration-300 font-medium shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <MessageCircle size={20} />
-                    <span>تواصل واتساب</span>
+                    <span>{t('contactWhatsApp')}</span>
                   </a>
                 )}
               </div>
@@ -263,7 +267,7 @@ const Footer = memo(function Footer() {
         <div ref={bottomSectionRef} className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-center gap-2 text-center">
             <p className="text-sm text-gray-400">
-              © 2026 {settings.site_name}. جميع الحقوق محفوظة
+              © 2026 {settings.site_name}. {t('copyright')}
             </p>
           </div>
         </div>

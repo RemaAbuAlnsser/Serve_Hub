@@ -6,15 +6,20 @@ import gsap from 'gsap';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+import { getLocalizedName } from '@/lib/localeHelpers';
 
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
 }
 
 const CategoriesGrid = memo(function CategoriesGrid() {
+  const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -118,7 +123,7 @@ const CategoriesGrid = memo(function CategoriesGrid() {
                   {category.image_url ? (
                     <Image
                       src={`${API_URL}${category.image_url}`}
-                      alt={category.name}
+                      alt={getLocalizedName(category, locale)}
                       fill
                       unoptimized
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -132,7 +137,7 @@ const CategoriesGrid = memo(function CategoriesGrid() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
                     <h3 className="text-base md:text-lg lg:text-xl font-bold text-white drop-shadow-lg line-clamp-2 text-center">
-                      {category.name}
+                      {getLocalizedName(category, locale)}
                     </h3>
                   </div>
                 </div>

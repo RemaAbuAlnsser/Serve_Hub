@@ -1,0 +1,49 @@
+import { Controller, Get, Post, Put, Delete, Body, Param, UseInterceptors, Inject } from '@nestjs/common';
+import { CacheInterceptor, CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
+import { SubcategoriesService } from './subcategories.service';
+
+@Controller('subcategories')
+@UseInterceptors(CacheInterceptor)
+export class SubcategoriesController {
+  constructor(
+    private subcategoriesService: SubcategoriesService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
+
+  @Get()
+  async findAll() {
+    return this.subcategoriesService.findAll();
+  }
+
+  @Get('category/:categoryId')
+  async findByCategory(@Param('categoryId') categoryId: string) {
+    return this.subcategoriesService.findByCategory(+categoryId);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.subcategoriesService.findOne(+id);
+  }
+
+  @Post()
+  async create(@Body() subcategoryData: any) {
+    const result = await this.subcategoriesService.create(subcategoryData);
+    await this.cacheManager.clear();
+    return result;
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() subcategoryData: any) {
+    const result = await this.subcategoriesService.update(+id, subcategoryData);
+    await this.cacheManager.clear();
+    return result;
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    const result = await this.subcategoriesService.remove(+id);
+    await this.cacheManager.clear();
+    return result;
+  }
+}

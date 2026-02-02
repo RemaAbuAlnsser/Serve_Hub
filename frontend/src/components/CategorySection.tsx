@@ -13,6 +13,8 @@ import NewLabel from '@/components/NewLabel';
 import { isProductNew } from '@/utils/dateUtils';
 import Toast from './Toast';
 import ProductSkeleton from './ProductSkeleton';
+import { useLocale, useTranslations } from 'next-intl';
+import { getLocalizedName, getLocalizedDescription } from '@/lib/localeHelpers';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -21,8 +23,10 @@ if (typeof window !== 'undefined') {
 interface Product {
   id: number;
   name: string;
+  name_en?: string;
   sku?: string;
   description?: string;
+  description_en?: string;
   price: number;
   old_price?: number;
   stock: number;
@@ -36,7 +40,9 @@ interface CategorySectionProps {
   category: {
     id: number;
     name: string;
+    name_en?: string;
     description?: string;
+    description_en?: string;
     image_url?: string;
   };
   index: number;
@@ -44,6 +50,8 @@ interface CategorySectionProps {
 
 const CategorySection = memo(function CategorySection({ category, index }: CategorySectionProps) {
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations('common');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showScrollButtons, setShowScrollButtons] = useState(false);
@@ -176,7 +184,7 @@ const CategorySection = memo(function CategorySection({ category, index }: Categ
               ref={titleRef}
               className="section-heading text-3xl md:text-4xl lg:text-5xl font-bold text-[#2c2c2c] text-center"
             >
-              {category.name}
+              {getLocalizedName(category, locale)}
             </h2>
             <div className="h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent flex-1 max-w-xs"></div>
             {showScrollButtons && (
@@ -198,8 +206,8 @@ const CategorySection = memo(function CategorySection({ category, index }: Categ
               </div>
             )}
           </div>
-          {category.description && (
-            <p className="text-gray-600 text-sm md:text-base text-center mb-4">{category.description}</p>
+          {(category.description || category.description_en) && (
+            <p className="text-gray-600 text-sm md:text-base text-center mb-4">{getLocalizedDescription(category, locale)}</p>
           )}
         </div>
 
@@ -281,7 +289,7 @@ const CategorySection = memo(function CategorySection({ category, index }: Categ
                     }}
                     className="product-name text-lg md:text-xl font-bold text-gray-800 mb-3 line-clamp-2 cursor-pointer hover:text-[#d4af37] transition-colors"
                   >
-                    {product.name}
+                    {getLocalizedName(product, locale)}
                   </h3>
                   <div className="mb-4">
                     {product.old_price && product.old_price > product.price ? (
@@ -315,7 +323,7 @@ const CategorySection = memo(function CategorySection({ category, index }: Categ
                       className="w-full px-3 py-3 bg-[#2c2c2c] text-white rounded-lg hover:bg-[#1a1a1a] transition-colors font-medium text-sm flex items-center justify-center gap-2 mt-auto"
                     >
                       <ShoppingCart className="w-4 h-4" />
-                      <span>أضف للسلة</span>
+                      <span>{t('addToCart')}</span>
                     </button>
                   )}
                 </div>

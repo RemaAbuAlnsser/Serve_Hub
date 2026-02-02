@@ -7,6 +7,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { API_URL } from '@/lib/api';
+import { useLocale } from 'next-intl';
+import { getLocalizedName } from '@/lib/localeHelpers';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -15,11 +17,14 @@ if (typeof window !== 'undefined') {
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
 }
 
 export default function CategoriesMenu() {
+  const locale = useLocale();
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
@@ -163,7 +168,7 @@ export default function CategoriesMenu() {
                   {category.image_url ? (
                     <Image
                       src={`${API_URL}${category.image_url}`}
-                      alt={category.name}
+                      alt={getLocalizedName(category, locale)}
                       fill
                       unoptimized
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -171,13 +176,13 @@ export default function CategoriesMenu() {
                   ) : (
                     <div className="h-full flex items-center justify-center bg-gradient-to-br from-[#d4af37] to-[#b8962e]">
                       <span className="text-4xl md:text-5xl lg:text-6xl group-hover:scale-125 transition-transform duration-500 text-white font-bold">
-                        {category.name.charAt(0)}
+                        {getLocalizedName(category, locale).charAt(0)}
                       </span>
                     </div>
                   )}
                 </div>
                 <h3 className="text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold text-gray-800 group-hover:text-[#d4af37] transition-colors duration-300 line-clamp-2">
-                  {category.name}
+                  {getLocalizedName(category, locale)}
                 </h3>
               </div>
             </div>

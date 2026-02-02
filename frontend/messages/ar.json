@@ -10,6 +10,7 @@
     "new": "الجديد",
     "loading": "جاري التحميل...",
     "addToCart": "أضف إلى السلة",
+    "addingToCart": "جاري الإضافة...",
     "buyNow": "اشتر الآن",
     "viewDetails": "عرض التفاصيل",
     "price": "السعر",
@@ -22,7 +23,8 @@
     "aboutUs": "من نحن",
     "privacyPolicy": "سياسة الخصوصية",
     "termsConditions": "الشروط والأحكام",
-    "allRightsReserved": "جميع الحقوق محفوظة"
+    "allRightsReserved": "جميع الحقوق محفوظة",
+    "backToHome": "العودة للرئيسية"
   },
   "home": {
     "title": "متجر إلكتروني - تسوق بثقة وسهولة",
@@ -73,7 +75,7 @@
     "fullName": "الاسم الكامل",
     "email": "البريد الإلكتروني",
     "phone": "رقم الهاتف",
-    "address": "العنوان",
+    "address": "العنوان الكامل (الشارع والبناية)",
     "city": "المدينة",
     "postalCode": "الرمز البريدي",
     "notes": "ملاحظات إضافية",
@@ -83,7 +85,22 @@
     "orderPlaced": "تم تقديم الطلب بنجاح",
     "orderNumber": "رقم الطلب",
     "thankYou": "شكراً لك!",
-    "deliveryFee": "رسوم التوصيل"
+    "deliveryFee": "رسوم التوصيل",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "totalAmount": "الإجمالي",
+    "searchCity": "ابحث عن المدينة...",
+    "billingShipping": "الفاتورة والشحن",
+    "deliveryCity": "مدينة التوصيل",
+    "selectDeliveryCity": "اختر مدينة التوصيل",
+    "deliveryAreas": "مناطق التوصيل",
+    "pleaseSelectCity": "يرجى اختيار مدينة التوصيل",
+    "selectCityToKnowCost": "اختر مدينة التوصيل من القائمة أعلاه لمعرفة تكلفة التوصيل",
+    "paymentInfo": "معلومات الدفع",
+    "cashOnDeliveryDesc": "عند استلام الطلب، يمكنك الدفع نقداً عن طريق بطاقة الائتمان، وفق سياسة الخصوصية.",
+    "backToCart": "العودة للسلة",
+    "enterFullName": "أدخل اسمك الكامل",
+    "enterAddress": "أدخل عنوانك بالتفصيل"
   },
   "search": {
     "title": "نتائج البحث",
@@ -100,7 +117,16 @@
     "priceAsc": "السعر: من الأقل للأعلى",
     "priceDesc": "السعر: من الأعلى للأقل",
     "newest": "الأحدث",
-    "popular": "الأكثر شعبية"
+    "popular": "الأكثر شعبية",
+    "subcategories": "الأقسام الفرعية",
+    "brands": "الماركات",
+    "all": "الكل",
+    "activeFilters": "الفلاتر النشطة:",
+    "clearAll": "مسح الكل",
+    "showing": "عرض",
+    "product": "منتج",
+    "productsPlural": "منتجات",
+    "noProductsInSection": "لا توجد منتجات في هذا القسم حالياً"
   },
   "footer": {
     "quickLinks": "روابط سريعة",
@@ -111,7 +137,12 @@
     "enterEmail": "أدخل بريدك الإلكتروني",
     "subscribe": "اشترك",
     "paymentMethods": "طرق الدفع",
-    "securePayment": "دفع آمن"
+    "securePayment": "دفع آمن",
+    "contactUs": "تواصل معنا",
+    "products": "المنتجات",
+    "returnPolicy": "سياسة التبديل والاسترجاع",
+    "contactWhatsApp": "تواصل واتساب",
+    "copyright": "جميع الحقوق محفوظة"
   },
   "validation": {
     "required": "هذا الحقل مطلوب",

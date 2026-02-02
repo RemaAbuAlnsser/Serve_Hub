@@ -11,11 +11,14 @@ import { useRouter, usePathname } from 'next/navigation';
 import { API_URL, getImageUrl } from '@/lib/api';
 import { useTranslations, useLocale } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
+import { getLocalizedName } from '@/lib/localeHelpers';
 
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
 }
 
@@ -218,7 +221,7 @@ const Header = memo(function Header() {
                       }}
                       className="w-full text-right px-4 py-2 text-sm text-[#2c2c2c] hover:bg-gray-50 transition-colors"
                     >
-                      {category.name}
+                      {getLocalizedName(category, locale)}
                     </button>
                   ))}
                 </div>

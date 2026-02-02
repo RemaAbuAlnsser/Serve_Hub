@@ -5,10 +5,13 @@ import { useEffect, useState, useMemo, memo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { X } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import { getLocalizedName } from '@/lib/localeHelpers';
 
 interface Subcategory {
   id: number;
   name: string;
+  name_en?: string;
   image_url?: string;
   category_id: number;
 }
@@ -16,7 +19,9 @@ interface Subcategory {
 interface Category {
   id: number;
   name: string;
+  name_en?: string;
   description?: string;
+  description_en?: string;
   image_url?: string;
   subcategories: Subcategory[];
 }
@@ -27,6 +32,7 @@ interface MegaMenuProps {
 }
 
 const MegaMenu = memo(function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
+  const locale = useLocale();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -129,7 +135,7 @@ const MegaMenu = memo(function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
                     <h3 className={`font-bold text-sm ${
                       selectedCategory === category.id ? 'text-[#2c2c2c]' : 'text-gray-700'
                     }`}>
-                      {category.name}
+                      {getLocalizedName(category, locale)}
                     </h3>
                     <svg
                       className={`w-4 h-4 transition-opacity ${
@@ -178,7 +184,7 @@ const MegaMenu = memo(function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
                             {subcategory.image_url ? (
                               <Image
                                 src={`${API_URL}${subcategory.image_url}`}
-                                alt={subcategory.name}
+                                alt={getLocalizedName(subcategory, locale)}
                                 width={80}
                                 height={80}
                                 className="w-full h-full object-cover"
@@ -187,13 +193,13 @@ const MegaMenu = memo(function MegaMenu({ isOpen, onClose }: MegaMenuProps) {
                             ) : (
                               <div className="w-full h-full bg-gradient-to-br from-[#2c2c2c] to-[#4a4a4a] flex items-center justify-center">
                                 <span className="text-white text-2xl font-bold">
-                                  {subcategory.name.charAt(0)}
+                                  {getLocalizedName(subcategory, locale).charAt(0)}
                                 </span>
                               </div>
                             )}
                           </div>
                           <span className="text-xs text-center text-gray-700 font-medium line-clamp-2 group-hover:text-[#2c2c2c]">
-                            {subcategory.name}
+                            {getLocalizedName(subcategory, locale)}
                           </span>
                         </div>
                       ))}
